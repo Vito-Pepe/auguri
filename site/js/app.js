@@ -9,21 +9,11 @@
 
   /* ------------------------------------------------------------------ */
   /* Foto: la prende dall'immagine del biglietto finale. Nel file unico   */
-  /* (build.py) è incorporata lì come data URI: la si usa una volta sola  */
+  /* (build.py) è incorporata lì come data URI e si usa così com'è: gli   */
+  /* indirizzi blob: non si vedono in alcune anteprime (es. su iPhone)    */
   /* ------------------------------------------------------------------ */
-  function photoUrl() {
-    const data = $('#win-photo').getAttribute('src');
-    if (!data.startsWith('data:')) return new URL(data, document.baseURI).href;
-    try {
-      const bin = atob(data.slice(data.indexOf(',') + 1));
-      const bytes = new Uint8Array(bin.length);
-      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-      return URL.createObjectURL(new Blob([bytes], { type: 'image/jpeg' }));
-    } catch (_) {
-      return data;
-    }
-  }
-  const PHOTO = photoUrl();
+  const src = $('#win-photo').getAttribute('src');
+  const PHOTO = src.startsWith('data:') ? src : new URL(src, document.baseURI).href;
   document.documentElement.style.setProperty('--photo', `url("${PHOTO}")`);
   new Image().src = PHOTO; // la carica subito, prima del puzzle
 
