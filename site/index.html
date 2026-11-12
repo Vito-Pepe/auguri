@@ -5,15 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#3a0d16">
-  <!-- Nome, icona e descrizione nell'elenco dei minigiochi -->
-  <title>Per te, Dottoressa</title>
-  <meta name="icona" content="❤️">
-  <meta name="description" content="Apri la busta: c'è una sorpresa per te">
+  <title>Per te, Dottoressa ❤</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 30'%3E%3Cpath fill='%23c8102e' d='M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 21.2 6.1-9.3 16-12.1 16-21.2C32 3.8 28.2 0 23.6 0z'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <!-- Se il file si apre in un'anteprima senza JavaScript (es. da WhatsApp su iPhone):
+       niente busta né puzzle, si vedono subito il biglietto, la foto e il messaggio -->
+  <noscript>
+    <style>
+      .intro, .wreath, .counter, .cta, .puzzle, .foot, .win-sub, .win-actions, .fx { display: none !important; }
+      #main[hidden] { display: block !important; }
+      .win[hidden] { display: grid !important; position: static; background: none; padding: 32px 16px 48px; backdrop-filter: none; -webkit-backdrop-filter: none; }
+    </style>
+  </noscript>
 </head>
 <body>
   <div class="bokeh" aria-hidden="true">
@@ -55,7 +61,7 @@
       <h1>Buon anniversario di laurea, <em>Dottoressa</em></h1>
 
       <div class="message">
-        <p><span id="years-ago">Sei anni fa</span> il tuo traguardo, oggi la nostra festa: auguri, amore mio!</p>
+        <p>Tanti auguri!</p>
       </div>
 
       <div class="counter" aria-live="off">
@@ -104,14 +110,13 @@
 
     <footer class="foot">
       <p>Fatto con <span aria-hidden="true">❤</span><span class="sr-only">amore</span> solo per te</p>
-      <a class="back" id="back" href="../" hidden>← Giochi</a>
     </footer>
   </main>
 
   <!-- 4. La sorpresa -->
   <div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="win-title" hidden>
     <div class="win-card">
-      <div class="polaroid"><img id="win-photo" alt="Lei il giorno della laurea, con la corona d'alloro e la tesi"></div>
+      <div class="polaroid"><img id="win-photo" src="img/foto.jpg" alt="Lei il giorno della laurea, con la corona d'alloro e la tesi"></div>
       <svg class="win-heart" viewBox="0 0 32 30" aria-hidden="true"><use href="#heart"/></svg>
       <h2 class="win-title" id="win-title">
         <span class="line l1">Tanti auguri, amore</span>

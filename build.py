@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Crea dist/auguri.html: la pagina in un file unico (stile, script e foto
-incorporati), come richiede l'app dei minigiochi per i giochi caricati.
+incorporati), da mandare così com'è e aprire con un browser.
 
 Uso:  python3 build.py [percorso/foto.jpg]
 La foto predefinita è site/img/foto.jpg (non è su git: va messa a mano).
@@ -12,7 +12,6 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent
 SITE = ROOT / "site"
 OUT = ROOT / "dist" / "auguri.html"
-MAX_SIZE = 3 * 1024 * 1024  # limite dei caricamenti nei minigiochi
 
 
 def replace_once(text, old, new):
@@ -34,18 +33,14 @@ def main():
 
     data = base64.b64encode(photo.read_bytes()).decode("ascii")
     html = replace_once(html, '<link rel="stylesheet" href="css/style.css">', f"<style>\n{css}</style>")
-    html = replace_once(
-        html,
-        '<script src="js/app.js"></script>',
-        f'<script>window.FOTO_DATA = "data:image/jpeg;base64,{data}";</script>\n  <script>\n{js}</script>',
-    )
+    html = replace_once(html, '<img id="win-photo" src="img/foto.jpg"',
+                        f'<img id="win-photo" src="data:image/jpeg;base64,{data}"')
+    html = replace_once(html, '<script src="js/app.js"></script>', f"<script>\n{js}</script>")
 
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
     size = OUT.stat().st_size
     print(f"{OUT.relative_to(ROOT)}: {size / 1024:.0f} KB")
-    if size > MAX_SIZE:
-        sys.exit("Troppo grande per i minigiochi (massimo 3 MB): usa una foto più leggera")
 
 
 if __name__ == "__main__":

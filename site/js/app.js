@@ -8,12 +8,12 @@
   const $ = (s) => document.querySelector(s);
 
   /* ------------------------------------------------------------------ */
-  /* Foto: file accanto alla pagina, oppure incorporata (window.FOTO_DATA) */
-  /* nella versione a file unico per l'app dei minigiochi                */
+  /* Foto: la prende dall'immagine del biglietto finale. Nel file unico   */
+  /* (build.py) è incorporata lì come data URI: la si usa una volta sola  */
   /* ------------------------------------------------------------------ */
   function photoUrl() {
-    const data = window.FOTO_DATA;
-    if (!data) return new URL('img/foto.jpg', document.baseURI).href;
+    const data = $('#win-photo').getAttribute('src');
+    if (!data.startsWith('data:')) return new URL(data, document.baseURI).href;
     try {
       const bin = atob(data.slice(data.indexOf(',') + 1));
       const bytes = new Uint8Array(bin.length);
@@ -25,14 +25,9 @@
   }
   const PHOTO = photoUrl();
   document.documentElement.style.setProperty('--photo', `url("${PHOTO}")`);
-  $('#win-photo').src = PHOTO;
   new Image().src = PHOTO; // la carica subito, prima del puzzle
 
-  // Dentro l'app dei minigiochi: link per tornare all'elenco
-  if (/\/(caricati|files)\//.test(window.location.pathname)) $('#back').hidden = false;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const WORDS = ['Zero', 'Un', 'Due', 'Tre', 'Quattro', 'Cinque', 'Sei', 'Sette', 'Otto', 'Nove', 'Dieci',
-    'Undici', 'Dodici', 'Tredici', 'Quattordici', 'Quindici'];
 
   /* ------------------------------------------------------------------ */
   /* Tempo trascorso dalla laurea                                        */
@@ -56,12 +51,10 @@
 
   const fmt = new Intl.NumberFormat('it-IT');
   const yearsNow = elapsed(new Date()).years || 6;
-  const yearsWord = WORDS[yearsNow] || String(yearsNow);
 
   function fillStaticTexts() {
     $('#years-num').textContent = yearsNow;
     $('#years-label').textContent = yearsNow === 1 ? 'anno' : 'anni';
-    $('#years-ago').textContent = yearsNow === 1 ? 'Un anno fa' : `${yearsWord} anni fa`;
     $('#this-year').textContent = GRAD.getFullYear() + yearsNow;
   }
 
