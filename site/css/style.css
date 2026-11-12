@@ -487,7 +487,7 @@ body {
 @keyframes pop { from { opacity: 0; transform: scale(.8) translateY(20px); } }
 
 .polaroid {
-  width: 64%;
+  width: 58%;
   margin: 0 auto;
   padding: 8px 8px 26px;
   background: #fff;
@@ -533,10 +533,44 @@ body {
   opacity: 0; animation: fade-in .8s ease 3.3s forwards;
 }
 @keyframes fade-in { to { opacity: 1; } }
+.gift {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 16px;
+  padding: 13px 24px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #f6e3a8, var(--gold) 55%, #b88f35);
+  color: #4a0f1b;
+  font-family: var(--sans); font-size: 1rem; font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 12px 26px -10px rgba(156, 122, 44, .95), inset 0 1px 0 rgba(255, 255, 255, .55);
+  -webkit-tap-highlight-color: transparent;
+  opacity: 0; animation: fade-in .8s ease 3.6s forwards;
+  transition: transform .15s ease;
+}
+.gift:active { transform: scale(.96); }
+.gift:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.gift::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .6) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: gift-shine 3s ease-in-out 4.4s infinite;
+}
+@keyframes gift-shine { 0%, 35% { transform: translateX(-120%); } 70%, 100% { transform: translateX(120%); } }
+.gift-icon { display: inline-block; font-size: 1.3rem; animation: wiggle 2.6s ease-in-out 4.4s infinite; }
+@keyframes wiggle {
+  0%, 60%, 100% { transform: rotate(0); }
+  68% { transform: rotate(-14deg); }
+  76% { transform: rotate(12deg); }
+  84% { transform: rotate(-8deg); }
+  92% { transform: rotate(5deg); }
+}
+
 .win-actions {
   display: flex; justify-content: center; gap: 10px;
-  margin-top: 18px;
-  opacity: 0; animation: fade-in .8s ease 3.6s forwards;
+  margin-top: 16px;
+  opacity: 0; animation: fade-in .8s ease 4s forwards;
 }
 
 .fx { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 30; }
