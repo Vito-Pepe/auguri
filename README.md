@@ -20,7 +20,7 @@ rimuovi.sh       spegne e cancella tutto
 ## Sul Raspberry
 
 ```bash
-git clone https://github.com/Vito-Pepe/auguri.git
+git clone -b claude/dreamy-archimedes-rc668g https://github.com/Vito-Pepe/auguri.git
 cd auguri
 ```
 
