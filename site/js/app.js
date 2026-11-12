@@ -350,7 +350,8 @@
     if (placedCount() === N * N) solve();
   }
 
-  function tap(t) {
+  // Solo da tastiera (Invio/Spazio su due pezzi): col dito e col mouse si trascina
+  function keySelect(t) {
     if (!selected) { selected = t; t.classList.add('selected'); return; }
     if (selected === t) { clearSelection(); return; }
     const a = slotOf[+selected.dataset.piece];
@@ -409,13 +410,24 @@
       t.style.removeProperty('--dy');
       if (!cancelled && target) swap(slotOf[+t.dataset.piece], slotOf[+target.dataset.piece]);
     } else if (!cancelled) {
-      tap(t);
+      nudge(t); // un tocco senza trascinare: il pezzo sobbalza per dire "trascinami"
     }
   }
   board.addEventListener('pointerup', (e) => endDrag(e, false));
   board.addEventListener('pointercancel', (e) => endDrag(e, true));
 
-  // Tastiera: Invio/Spazio selezionano, le frecce spostano il focus
+  // iPhone: mentre si trascina un pezzo la pagina non deve scorrere
+  board.addEventListener('touchmove', (e) => {
+    if (playing && e.target.closest && e.target.closest('.tile')) e.preventDefault();
+  }, { passive: false });
+
+  function nudge(t) {
+    t.classList.remove('nudge');
+    void t.offsetWidth;
+    t.classList.add('nudge');
+  }
+
+  // Tastiera: Invio/Spazio scambiano due pezzi, le frecce spostano il focus
   board.addEventListener('click', (e) => {
     const t = e.target.closest('.tile');
     if (solved) {
@@ -423,7 +435,7 @@
       if (t && performance.now() - solvedAt > 2200) showWin();
       return;
     }
-    if (t && e.detail === 0 && playing) tap(t);
+    if (t && e.detail === 0 && playing) keySelect(t);
   });
   board.addEventListener('keydown', (e) => {
     const t = e.target.closest && e.target.closest('.tile');

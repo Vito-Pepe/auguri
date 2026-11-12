@@ -315,6 +315,7 @@ body {
   background: #1a0509;
   touch-action: none;
   user-select: none; -webkit-user-select: none;
+  -webkit-touch-callout: none;
   transition: box-shadow .6s ease;
 }
 
@@ -363,6 +364,12 @@ body {
   filter: drop-shadow(0 12px 18px rgba(0, 0, 0, .55));
 }
 .tile.right::after { animation: right-glow .9s ease-out; }
+.tile.nudge { animation: nudge .45s ease; }
+@keyframes nudge {
+  25% { translate: 0 -5px; }
+  50% { translate: 0 0; }
+  75% { translate: 0 -2px; }
+}
 @keyframes right-glow {
   0%   { box-shadow: inset 0 0 0 3px rgba(212, 175, 90, 0); background: rgba(255, 230, 160, 0); }
   25%  { box-shadow: inset 0 0 0 3px var(--gold); background: rgba(255, 230, 160, .3); }
