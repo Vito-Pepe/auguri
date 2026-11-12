@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#3a0d16">
+  <title>Per te, Dottoressa ❤</title>
+  <meta property="og:title" content="Una sorpresa per te ❤">
+  <meta property="og:description" content="Apri la busta…">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 30'%3E%3Cpath fill='%23c8102e' d='M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 21.2 6.1-9.3 16-12.1 16-21.2C32 3.8 28.2 0 23.6 0z'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="preload" href="img/foto.jpg" as="image">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="bokeh" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- 1. La busta -->
+  <section class="intro" id="intro">
+    <p class="intro-date">12 novembre</p>
+    <button class="envelope" id="envelope" type="button" aria-label="Apri la busta">
+      <span class="env-back"></span>
+      <span class="letter">
+        <span class="letter-to">Per la mia</span>
+        <span class="letter-name">Dottoressa</span>
+        <span class="letter-heart" aria-hidden="true">❤</span>
+      </span>
+      <span class="env-front"></span>
+      <span class="env-flap"></span>
+      <span class="env-seal" aria-hidden="true">
+        <svg viewBox="0 0 32 30"><use href="#heart"/></svg>
+      </span>
+    </button>
+    <p class="intro-hint">Tocca la busta</p>
+  </section>
+
+  <!-- 2. Il biglietto -->
+  <main class="main" id="main" hidden>
+    <article class="card">
+      <div class="wreath" id="wreath">
+        <svg class="wreath-svg" viewBox="0 0 200 200" aria-hidden="true"></svg>
+        <div class="wreath-center">
+          <span class="wreath-num" id="years-num">6</span>
+          <span class="wreath-label" id="years-label">anni</span>
+        </div>
+      </div>
+
+      <p class="eyebrow">12.11.2020 <span aria-hidden="true">—</span> 12.11.<span id="this-year">2026</span></p>
+      <h1>Buon anniversario di laurea, <em>Dottoressa</em></h1>
+
+      <div class="message">
+        <p><span id="years-ago">Sei anni fa</span>, con la corona d'alloro tra i capelli e la tesi rossa stretta tra le mani, sorridevi così.</p>
+        <p>Dietro quel sorriso c'erano notti sui libri, ansie, esami e una forza che continua a stupirmi ogni giorno.</p>
+        <p>Oggi voglio festeggiare quel traguardo con te: quello che hai conquistato mi riempie d'orgoglio, e tu mi riempi la vita.</p>
+      </div>
+
+      <div class="counter" aria-live="off">
+        <p class="counter-title">Sei Dottoressa da</p>
+        <div class="counter-grid">
+          <div><span id="c-y">0</span><small>anni</small></div>
+          <div><span id="c-d">0</span><small>giorni</small></div>
+          <div><span id="c-h">0</span><small>ore</small></div>
+          <div><span id="c-m">0</span><small>minuti</small></div>
+          <div><span id="c-s">0</span><small>secondi</small></div>
+        </div>
+        <p class="counter-total">cioè <strong id="c-total">0</strong> giorni da festeggiare</p>
+      </div>
+
+      <p class="signature">Con tutto il mio amore <span class="sig-heart" aria-hidden="true">❤</span></p>
+
+      <a class="cta" href="#gioco">Ho preparato un gioco per te <span aria-hidden="true">↓</span></a>
+    </article>
+
+    <!-- 3. Il puzzle -->
+    <section class="puzzle" id="gioco">
+      <h2>Rimetti insieme quel giorno</h2>
+      <p class="puzzle-help">
+        Ho diviso un ricordo in 16 pezzi.<br>
+        <strong>Tocca due pezzi</strong> per scambiarli, oppure <strong>trascinali</strong>.
+        Quando lo completi c'è una sorpresa.
+      </p>
+
+      <div class="board-wrap">
+        <div class="board" id="board" aria-label="Puzzle 4 per 4">
+          <div class="peek" id="peek" aria-hidden="true"></div>
+          <div class="board-start" id="board-start">
+            <button class="btn btn-primary" id="start" type="button">Inizia <span aria-hidden="true">❤</span></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="puzzle-bar">
+        <p class="stats"><span>Mosse <strong id="moves">0</strong></span><span>Al loro posto <strong id="placed">16</strong>/16</span></p>
+        <div class="puzzle-actions">
+          <button class="btn" id="peek-btn" type="button" disabled>Sbircia la foto</button>
+          <button class="btn" id="shuffle-btn" type="button" disabled>Rimescola</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="foot">Fatto con <span aria-hidden="true">❤</span><span class="sr-only">amore</span> solo per te</footer>
+  </main>
+
+  <!-- 4. La sorpresa -->
+  <div class="win" id="win" role="dialog" aria-modal="true" aria-labelledby="win-title" hidden>
+    <div class="win-card">
+      <div class="polaroid"><img src="img/foto.jpg" alt="Lei il giorno della laurea, con la corona d'alloro e la tesi"></div>
+      <svg class="win-heart" viewBox="0 0 32 30" aria-hidden="true"><use href="#heart"/></svg>
+      <h2 class="win-title" id="win-title">
+        <span class="line l1">Tanti auguri, amore</span>
+        <span class="line l2">ti amo</span>
+      </h2>
+      <p class="win-sub" id="win-sub"></p>
+      <div class="win-actions">
+        <button class="btn btn-light" id="again" type="button">Altri cuori</button>
+        <button class="btn btn-ghost" id="close-win" type="button">Chiudi</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas class="fx" id="fx" aria-hidden="true"></canvas>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <path id="heart" d="M23.6 0c-3.4 0-6.3 2.7-7.6 5.6C14.7 2.7 11.8 0 8.4 0 3.8 0 0 3.8 0 8.4c0 9.4 9.5 11.9 16 21.2 6.1-9.3 16-12.1 16-21.2C32 3.8 28.2 0 23.6 0z"/>
+    </defs>
+  </svg>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
