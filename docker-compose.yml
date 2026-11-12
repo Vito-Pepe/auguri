@@ -1,21 +1,21 @@
 services:
   auguri:
     build: .
-    image: auguri:latest
-    container_name: auguri
-    restart: unless-stopped
     ports:
-      - "${PORT:-8088}:80"
-
-  # Tunnel pubblico Cloudflare "usa e getta": nessun account, nessuna porta da
-  # aprire sul router. Si attiva solo con:  docker compose --profile pubblico up -d
-  # L'indirizzo https://xxxx.trycloudflare.com compare nei log del container.
-  tunnel:
-    image: cloudflare/cloudflared:latest
-    container_name: auguri-tunnel
+      # Solo per l'ingresso HTTPS di minigiochi (https://minigiochi.<tailnet>.ts.net/auguri/,
+      # repo ingressi-https): niente LAN, niente Internet
+      - "127.0.0.1:8095:8080"
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 50
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/"]
+      interval: 60s
+      timeout: 5s
+      retries: 3
     restart: unless-stopped
-    command: tunnel --no-autoupdate --url http://auguri:80
-    depends_on:
-      - auguri
-    profiles:
-      - pubblico

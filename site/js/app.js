@@ -6,6 +6,30 @@
   const N = 4; // puzzle 4x4 = 16 pezzi
 
   const $ = (s) => document.querySelector(s);
+
+  /* ------------------------------------------------------------------ */
+  /* Foto: file accanto alla pagina, oppure incorporata (window.FOTO_DATA) */
+  /* nella versione a file unico per l'app dei minigiochi                */
+  /* ------------------------------------------------------------------ */
+  function photoUrl() {
+    const data = window.FOTO_DATA;
+    if (!data) return new URL('img/foto.jpg', document.baseURI).href;
+    try {
+      const bin = atob(data.slice(data.indexOf(',') + 1));
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      return URL.createObjectURL(new Blob([bytes], { type: 'image/jpeg' }));
+    } catch (_) {
+      return data;
+    }
+  }
+  const PHOTO = photoUrl();
+  document.documentElement.style.setProperty('--photo', `url("${PHOTO}")`);
+  $('#win-photo').src = PHOTO;
+  new Image().src = PHOTO; // la carica subito, prima del puzzle
+
+  // Dentro l'app dei minigiochi: link per tornare all'elenco
+  if (/\/(caricati|files)\//.test(window.location.pathname)) $('#back').hidden = false;
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const WORDS = ['Zero', 'Un', 'Due', 'Tre', 'Quattro', 'Cinque', 'Sei', 'Sette', 'Otto', 'Nove', 'Dieci',
     'Undici', 'Dodici', 'Tredici', 'Quattordici', 'Quindici'];

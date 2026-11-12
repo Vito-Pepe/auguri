@@ -324,7 +324,7 @@ body {
   padding: 2px;
   border: 0; margin: 0;
   border-radius: 7px;
-  background-image: url("../img/foto.jpg");
+  background-image: var(--photo);
   background-size: 400% 400%;
   background-position: calc(var(--pc) * 100% / 3) calc(var(--pr) * 100% / 3);
   background-origin: border-box;
@@ -382,7 +382,7 @@ body {
 
 .peek {
   position: absolute; inset: 0; z-index: 7;
-  background: url("../img/foto.jpg") center / cover no-repeat;
+  background: var(--photo) center / cover no-repeat;
   opacity: 0; pointer-events: none;
   transition: opacity .35s ease;
 }
@@ -449,7 +449,16 @@ body {
   font-style: italic;
   color: rgba(255, 247, 232, .55);
 }
+.foot p { margin: 0; }
 .foot span { color: var(--red); font-style: normal; }
+.back {
+  display: inline-block;
+  margin-top: 14px;
+  font-family: var(--sans); font-style: normal; font-size: .85rem; font-weight: 600;
+  color: rgba(255, 247, 232, .6);
+  text-decoration: none;
+}
+.back:hover { color: var(--cream); }
 
 /* ---------- 4. La sorpresa ---------- */
 .win {

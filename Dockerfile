@@ -1,9 +1,8 @@
-# Immagine multi-architettura: gira su Raspberry Pi (arm64 / armv7) e su PC (amd64)
-FROM nginx:1.27-alpine
+# nginx senza root (utente 101, porta 8080): multi-arch, gira sul Raspberry Pi 5 (arm64)
+FROM nginxinc/nginx-unprivileged:1.27-alpine
 
 COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
-COPY site/ /usr/share/nginx/html/
+# File unico creato da build.py (con la foto dentro): non è su git, va copiato sul Pi
+COPY dist/auguri.html /usr/share/nginx/html/index.html
 
-EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
-  CMD wget -q --spider http://127.0.0.1/ || exit 1
+EXPOSE 8080

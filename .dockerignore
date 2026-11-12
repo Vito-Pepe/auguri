@@ -1,4 +1,5 @@
 .git
 *.md
 docker-compose.yml
-*.sh
+site
+build.py

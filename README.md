@@ -1,88 +1,98 @@
 # auguri ❤
 
 Biglietto d'auguri per l'anniversario di laurea (12.11.2020): busta da aprire,
-biglietto con contatore del tempo passato da Dottoressa e un puzzle 4×4 con la
-foto della laurea. Quando il puzzle è completo appare
+biglietto con il contatore del tempo da Dottoressa e un puzzle 4×4 con la foto
+della laurea. Quando il puzzle è completo appare
 **"Tanti auguri, amore — ti amo ❤"** con una pioggia di cuori.
 
-Sito statico (HTML/CSS/JS, nessuna dipendenza) servito da nginx in Docker.
-L'immagine gira su Raspberry Pi a 64 e a 32 bit.
+**Indirizzo:** `https://minigiochi.<tailnet>.ts.net/auguri/`, solo dalla tailnet.
+
+## Come funziona
+
+- La pagina è **un file unico** (`dist/auguri.html`, circa 270 KB): stile,
+  script e foto sono dentro. Lo crea `build.py` dai sorgenti in `site/`.
+- La **foto non è su git** (la repo è pubblica): `site/img/` e `dist/` sono in
+  `.gitignore`. Sul Pi va copiato a mano il file già pronto.
+- Il container `auguri-auguri-1` (nginx non root, in sola lettura) risponde su
+  **`127.0.0.1:8095`**, solo sul Pi: niente LAN, niente Internet. Con qualsiasi
+  percorso restituisce la pagina.
+- L'ingresso HTTPS di minigiochi (repo `ingressi-https`, `serve/minigiochi.json`)
+  manda `/auguri/` a `127.0.0.1:8095` e tutto il resto all'app come prima.
+  L'app minigiochi non viene modificata e la pagina non compare tra i giochi.
 
 ```
-site/            la pagina (index.html, css/, js/, img/foto.jpg)
-deploy/          configurazione nginx
+site/            sorgenti (index.html, css/, js/; img/foto.jpg solo in locale)
+build.py         crea dist/auguri.html
+deploy/          configurazione nginx del container
 Dockerfile
 docker-compose.yml
-pubblica.sh      avvia sito + link pubblico Cloudflare
-rimuovi.sh       spegne e cancella tutto
 ```
 
-## Sul Raspberry
+## Installazione sul Pi
 
-```bash
-git clone -b claude/dreamy-archimedes-rc668g https://github.com/Vito-Pepe/auguri.git
-cd auguri
-```
+1. Clonare la repo e preparare la cartella per il file:
 
-**La foto non è nel repo** (il repo è pubblico). Copiala dal tuo computer al
-Raspberry, già ritagliata (`foto.jpg`, 900×900, senza metadati):
+   ```bash
+   cd ~
+   git clone https://github.com/Vito-Pepe/auguri.git
+   mkdir -p ~/auguri/dist
+   ```
 
-```bash
-scp foto.jpg <utente>@<raspberry>:~/auguri/site/img/foto.jpg
-```
+2. Copiare `auguri.html` (quello già pronto, con la foto) in
+   `~/auguri/dist/auguri.html`. Da iPhone con Termius: SFTP verso il Pi,
+   cartella `auguri/dist`, carica il file. Da un computer:
 
-Senza `site/img/foto.jpg` il puzzle resta vuoto e `pubblica.sh` si ferma.
+   ```bash
+   scp auguri.html pepe@100.96.58.127:~/auguri/dist/auguri.html
+   ```
 
-### Opzione A: link pubblico Cloudflare (la più rapida)
+3. Controllare che la porta sia libera. Se il comando non stampa niente, è libera:
 
-Non serve un account e non bisogna aprire porte sul router. Funziona su
-Raspberry con sistema a 64 bit (`uname -m` restituisce `aarch64`).
+   ```bash
+   sudo ss -ltn | grep ':8095 '
+   ```
 
-```bash
-./pubblica.sh
-```
+4. Avviare e provare:
 
-Lo script avvia il sito e il tunnel e stampa un link tipo
-`https://parole-a-caso.trycloudflare.com`: è quello da mandarle.
-Il link cambia ogni volta che il tunnel viene riavviato.
+   ```bash
+   cd ~/auguri
+   docker compose up -d --build
+   curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8095/
+   ```
 
-### Opzione B: Tailscale Funnel
+   Risposta attesa: `200`. Se dice `000` o "Connection reset", nginx sta ancora
+   partendo: riprovare dopo qualche secondo.
 
-Funnel apre a internet un servizio del Raspberry: lo vede chiunque abbia il
-link, anche fuori dalla tailnet. Funziona anche su sistemi a 32 bit.
+5. Unire la PR di `ingressi-https` che aggiunge `/auguri/`. Entro 5 minuti il cron
+   riavvia gli ingressi. Per non aspettare: `cd ~/ingressi-https && ./update.sh`.
+   Il riavvio fa cadere per qualche secondo tutti gli indirizzi `*.ts.net` delle app.
 
-```bash
-docker compose up -d --build                # sito su http://localhost:8088
-sudo tailscale funnel --bg 8088             # pubblica su https://<raspberry>.<tailnet>.ts.net
-sudo tailscale funnel status                # mostra il link pubblico
-```
-
-La prima volta il comando può chiederti di abilitare Funnel (e i certificati
-HTTPS) per la tailnet e mostra il link da aprire per farlo.
-
-### Prova in locale
-
-```bash
-docker compose up -d --build
-# poi apri http://<ip-del-raspberry>:8088
-```
-
-Se la porta 8088 è già occupata: `PORT=9090 docker compose up -d --build`.
+6. Aprire `https://minigiochi.<tailnet>.ts.net/auguri/`.
 
 ## Rimozione
 
+1. Su GitHub, nella PR di `ingressi-https` già unita, premere **Revert** e unire la
+   nuova PR con "Create a merge commit". Entro 5 minuti `/auguri/` sparisce
+   dall'ingresso.
+2. Sul Pi:
+
+   ```bash
+   cd ~/auguri && docker compose down --rmi local
+   rm -rf ~/auguri
+   ```
+
+3. Togliere le righe di `auguri` da `INFRASTRUTTURA-PI.md` (repo `sillabe`).
+
+## Cambiare testi o foto
+
+Testi in `site/index.html`, data della laurea nella costante `GRAD` di
+`site/js/app.js`. Per rifare il file unico serve la foto in `site/img/foto.jpg`
+(quadrata, 900×900):
+
 ```bash
-./rimuovi.sh                                # ferma sito e tunnel e cancella le immagini
-sudo tailscale funnel --https=443 off       # solo se hai usato Funnel
+python3 build.py              # crea dist/auguri.html
+docker compose up -d --build  # sul Pi, per pubblicarlo
 ```
 
-Controlla con `sudo tailscale funnel status` che non sia rimasto niente di
-pubblicato.
-
-## Personalizzare
-
-- Testi del biglietto: `site/index.html`
-- Data della laurea: costante `GRAD` in `site/js/app.js`
-- Foto: `site/img/foto.jpg`, quadrata (900×900), ignorata da git
-
-La pagina ha `noindex` e un `robots.txt` che blocca i motori di ricerca.
+Prova in locale senza Docker: `python3 -m http.server -d site 8000`, con la foto
+in `site/img/foto.jpg`.
